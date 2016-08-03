@@ -1,0 +1,95 @@
+A machine includes below attributes: 
+•	machine name (mName) - The name of the machine (unique)
+•	user name (userName) - The owner or the creator of this machine (unique)
+•	host name (hostName) - The host of the machine
+•	ip address (ipAddress) - The IP address of the machine
+•	description (description) - The description of this machine
+•	create time (createTime) - The creation time of this machine
+•	update time (updateTime) - The update time of this machine, once this machine info is modified, this attribute will be updated.
+•	id (id) - This id is created by mongodb and it is unique as well. It is called ObjectId in mongodb environment.(unique)
+Below the detailed information of the rest api. 
+1. Create a machine 
+Path: 
+/machineRestapi/create
+/machineRestapi/
+Method: 
+PUT
+POST
+Request Parameters: 
+@FormParam("userName") - example: tangtt
+@FormParam("mName") - example: w9b
+@FormParam("hostName") - example: www.w9b.com
+@FormParam("ipAddress") - example: 127.0.0.1
+@FormParam("description") - example: w9b
+Response: 
+If the machine has been created successfully
+Return “New machine has been created!” and Status 201
+
+If the machine cannot be created 
+Return “The machine has already been in DB!” or “The username or mName is null!” and both with Status 400
+2. Find a machine by machine name 
+Path: 
+/machineRestapi/find
+/machineRestapi/machine/{mName}
+Method: 
+POST
+GET
+Request Parameters: 
+@PathParam("mName")
+Response: 
+Status 201:
+{"id":"578895b3a3d4eb3f1c5a289c",
+"mName":"w9b1",
+"hostName":"www.w9b1test.com",
+"ipAdd":"127.1.1.1",
+"des":"w9b1test",
+"createTime":"2016-07-15 15:07:975",
+"updateTime":"2016-07-15 15:07:810"}
+Status 400:
+Not found the record in database or something wrong.
+3. Find machine list of a specific user 
+Path: 
+/machineRestapi/find/mlist
+/machineRestapi/mlist/{userName}
+Method: 
+POST
+GET
+Request Parameters: 
+@PathParam("userName")
+Response:
+Status 201:
+[{"id":"578895b3a3d4eb3f1c5a289c","userName":"tangtt","mName":"w9b1","hostName":"www.w9b1test.com","ipAdd":"127.1.1.1","des":"w9b1test","createTime":"2016-07-15 15:07:975","updateTime":"2016-07-15 15:07:810"},{"id":"578895cfa3d4eb3f1c5a289d","userName":"tangtt","mName":"w9b2","hostName":"www.w9b2.com","ipAdd":"127.0.0.2","des":"w9b2","createTime":"2016-07-15 15:07:835","updateTime":"2016-07-15 15:07:835"},{"id":"578895e3a3d4eb3f1c5a289e","userName":"tangtt","mName":"w9b3","hostName":"www.w9b3.com","ipAdd":"127.0.0.3","des":"w9b3","createTime":"2016-07-15 15:07:944","updateTime":"2016-07-15 15:07:944"}]
+Status 400:
+Not found any machine record in the db or something wrong
+4. Update the machine information 
+Path: 
+/machineRestapi/update
+/machineRestapi/
+Method: 
+POST
+PUT
+Request Parameters: 
+@FormParam("userName") - example: tangtt
+@FormParam("mName") - example: w9b
+@FormParam("hostName") - example: www.w9b.com
+@FormParam("ipAddress") - example: 127.0.0.1
+@FormParam("description") - example: w9b
+Response: 
+If the machine has been updated successfully
+Return “DB has been updated!” and with Status 201
+If the machine cannot be updated
+Return “The mName or username does not exist in DB!” or “The mName or the username is null!” and both with Status 400
+5. Delete a machine 
+Path: 
+/machineRestapi/delete/{mName}
+/machineRestapi/{mName}
+Method: 
+DELETE
+Request Parameters: 
+@PathParam("mName")
+Response:
+If machine has been deleted successfully
+Return “The machine has been deleted!” with Status 200
+If machine cannot be deleted
+Return “The machine does not exist in DB!” or “The mName is null!” and both with Status 400.
+
