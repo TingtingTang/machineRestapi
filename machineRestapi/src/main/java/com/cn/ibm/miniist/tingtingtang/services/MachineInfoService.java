@@ -15,6 +15,7 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.QueryOperators;
 
 public class MachineInfoService
 {
@@ -98,9 +99,7 @@ public class MachineInfoService
 			return machineInfo;
 		} 
 		else
-		{
 			return null;
-		}
 	}
 	
 	/*
@@ -139,12 +138,18 @@ public class MachineInfoService
 			machineList.add(machineInfo);
 		}
 		
-		return machineList;
+		if(!machineList.isEmpty())
+		{
+			return machineList;
+		}
+		
+		else
+			return null;
 		
 	}
 	
 	/*
-	 * 	Update the corresponding machine info using the unique machine name
+	 * 	Update the corresponding machine info using the unique machine name and the specific user name
 	 */
 
 	public Boolean updateMachine(MachineInfo machineInfo, String collName)
@@ -152,10 +157,11 @@ public class MachineInfoService
 		db = dbhelper.getDB();
 		DBCollection collection = db.getCollection(collName);
 		
-		BasicDBObject findBymName = new BasicDBObject();
-		findBymName.put("mName", machineInfo.getMachineName());
+		BasicDBObject queryObject = new BasicDBObject().append(QueryOperators.AND,
+				new BasicDBObject[] {new BasicDBObject("mName", machineInfo.getMachineName()),
+						new BasicDBObject("userName", machineInfo.getUserName())});
 		
-		DBCursor cursor = collection.find(findBymName);
+		DBCursor cursor = collection.find(queryObject);
 		if(cursor.hasNext())
 		{
 			BasicDBObject updateFields = new BasicDBObject();
